@@ -18,7 +18,7 @@ export function CoverageMapSection() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <section id="harta" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+    <section id="harta" className="mx-auto max-w-6xl px-4 py-12 sm:px-5 sm:py-20">
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/10 px-3 py-1 text-xs font-semibold tracking-wide text-brand">
@@ -28,16 +28,16 @@ export function CoverageMapSection() {
             </span>
             Hartă acoperire live
           </p>
-          <h2 className="mt-4 max-w-xl text-3xl font-extrabold sm:text-4xl tracking-tight">
+          <h2 className="mt-3 max-w-xl text-[1.7rem] font-black leading-[1.15] tracking-tight sm:mt-4 sm:text-4xl">
             Cât de repede ajungem la tine?
           </h2>
-          <p className="mt-4 max-w-2xl text-muted-foreground">
+          <p className="mt-3 max-w-2xl text-[0.95rem] leading-relaxed text-muted-foreground sm:mt-4 sm:text-base">
             Pornim din Constanța și acoperim întreg județul, litoralul și tronsoanele A2 / A4. Cercurile
             arată timpul estimat de sosire.
           </p>
         </div>
 
-        <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 sm:mx-0 sm:overflow-visible sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="-mx-4 flex gap-2.5 overflow-x-auto px-4 pb-1 sm:mx-0 sm:overflow-visible sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {stats.map((s) => (
             <div
               key={s.label}
@@ -51,19 +51,19 @@ export function CoverageMapSection() {
         </div>
       </div>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-        <div className="group relative -mx-5 rounded-[28px] bg-gradient-to-br from-brand/40 via-brand/10 to-transparent p-0 shadow-card sm:mx-0 sm:p-[1.5px]">
+      <div className="mt-6 grid gap-5 sm:mt-10 sm:gap-6 lg:grid-cols-[1.6fr_1fr]">
+        <div className="group relative -mx-4 rounded-[28px] bg-gradient-to-br from-brand/40 via-brand/10 to-transparent p-0 shadow-card sm:mx-0 sm:p-[1.5px]">
           <div className="relative overflow-hidden border-border/60 bg-card sm:rounded-[26px] sm:border">
             {mounted ? (
               <Suspense
-                fallback={<div className="h-[68svh] min-h-[460px] w-full animate-pulse bg-surface sm:h-[560px]" aria-hidden="true" />}
+                fallback={<div className="h-[78svh] min-h-[520px] w-full animate-pulse bg-surface sm:h-[620px]" aria-hidden="true" />}
               >
                 <div className="[&_.leaflet-container]:transition-[filter] dark:[&_.leaflet-container]:brightness-[.9] dark:[&_.leaflet-container]:contrast-[1.03]">
                   <CoverageMap />
                 </div>
               </Suspense>
             ) : (
-              <div className="h-[68svh] min-h-[460px] w-full bg-surface sm:h-[560px]" aria-hidden="true" />
+              <div className="h-[78svh] min-h-[520px] w-full bg-surface sm:h-[620px]" aria-hidden="true" />
             )}
 
           </div>
