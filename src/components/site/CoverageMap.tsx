@@ -501,8 +501,19 @@ export default function CoverageMap() {
           )}
         </div>
 
-        {/* ==== FAB-uri ==== */}
-        <div className="absolute right-2.5 top-16 z-[600] flex flex-col gap-2 sm:right-3">
+        {/* ==== FAB-uri: coloană când panoul e restrâns, rând deasupra panoului când e extins ==== */}
+        <div
+          className={`vm-fabs absolute right-2.5 z-[600] flex gap-2 sm:right-3 ${
+            snap === 0 ? "top-16 flex-col" : "flex-row-reverse"
+          }`}
+          style={
+            snap === 0
+              ? undefined
+              : {
+                  bottom: `calc(${(sheetH ?? 0) + 12}px + ${fullscreen ? "0px" : "var(--vm-bar, 0px)"})`,
+                }
+          }
+        >
           {fabs.map((f) => (
             <button
               key={f.key}
@@ -515,7 +526,11 @@ export default function CoverageMap() {
               {f.icon}
             </button>
           ))}
-          <div className="mt-1 flex flex-col overflow-hidden rounded-full border border-white/15 bg-black/60 backdrop-blur-xl">
+          <div
+            className={`hidden overflow-hidden rounded-full border border-white/15 bg-black/60 backdrop-blur-xl sm:flex ${
+              snap === 0 ? "mt-1 flex-col" : "flex-row-reverse"
+            }`}
+          >
             <button
               onClick={() => mapRef.current?.zoomIn()}
               aria-label="Mărește harta"
@@ -523,7 +538,7 @@ export default function CoverageMap() {
             >
               <Plus className="size-5" />
             </button>
-            <span className="mx-auto h-px w-6 bg-white/15" />
+            <span className={snap === 0 ? "mx-auto h-px w-6 bg-white/15" : "my-auto h-6 w-px bg-white/15"} />
             <button
               onClick={() => mapRef.current?.zoomOut()}
               aria-label="Micșorează harta"
@@ -533,6 +548,7 @@ export default function CoverageMap() {
             </button>
           </div>
         </div>
+
 
         {/* ==== Panou straturi ==== */}
         {layersOpen && (
