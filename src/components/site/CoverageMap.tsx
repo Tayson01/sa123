@@ -538,6 +538,19 @@ export default function CoverageMap() {
 
         <div className="pointer-events-none absolute inset-0 z-[500] vm-vignette" />
 
+        {/* Indiciu pe telefon: harta se mișcă doar cu două degete, ca pagina să poată fi derulată */}
+        <div
+          aria-hidden={!lockHint}
+          className={`pointer-events-none absolute inset-0 z-[700] flex items-center justify-center transition-opacity duration-200 ${
+            lockHint ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="rounded-2xl bg-black/70 px-4 py-2.5 text-center text-sm font-semibold text-white backdrop-blur-md">
+            Folosește două degete pentru a muta harta
+          </span>
+        </div>
+
+
         {/* ==== BARA DE SUS: căutare mereu vizibilă pe mobil ==== */}
         <div
           className="absolute inset-x-0 top-0 z-[600] flex items-center gap-2 p-2.5 sm:p-3"
