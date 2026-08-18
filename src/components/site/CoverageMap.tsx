@@ -503,9 +503,10 @@ export default function CoverageMap() {
 
         {/* ==== FAB-uri: coloană când panoul e restrâns, rând deasupra panoului când e extins ==== */}
         <div
-          className={`vm-fabs absolute right-2.5 z-[600] flex gap-2 sm:right-3 ${
+          className={`vm-fabs absolute right-2.5 z-[600] flex gap-2 transition-opacity duration-200 sm:right-3 ${
             snap === 0 ? "top-16 flex-col" : "flex-row-reverse"
-          }`}
+          } ${snap === 2 ? "pointer-events-none opacity-0" : "opacity-100"}`}
+
           style={
             snap === 0
               ? undefined
