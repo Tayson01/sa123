@@ -116,9 +116,13 @@ function MapEvents({ picking, onPick }: { picking: boolean; onPick: (p: LatLngTu
 function MapApi({
   onReady,
   onZoom,
+  lock,
+  onLockHint,
 }: {
   onReady: (m: L.Map) => void;
   onZoom: (z: number) => void;
+  lock: boolean;
+  onLockHint: () => void;
 }) {
   const map = useMap();
   useEffect(() => {
@@ -151,8 +155,56 @@ function MapApi({
       map.off("mouseout", disable);
     };
   }, [map, onReady, onZoom]);
+
+  /* Pe touch: un deget = scroll în pagină, două degete = mișcă harta.
+     În fullscreen harta se mișcă normal cu un deget. */
+  useEffect(() => {
+    const coarse =
+      typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+    if (!coarse) return;
+
+    const el = map.getContainer();
+
+    if (!lock) {
+      map.dragging.enable();
+      el.style.touchAction = "none";
+      return () => {
+        el.style.touchAction = "";
+      };
+    }
+
+    map.dragging.disable();
+    el.style.touchAction = "pan-y";
+
+    const onStart = (e: TouchEvent) => {
+      if (e.touches.length >= 2) map.dragging.enable();
+      else map.dragging.disable();
+    };
+    const onMove = (e: TouchEvent) => {
+      if (e.touches.length < 2) onLockHint();
+    };
+    const onEnd = () => {
+      if (map.dragging.enabled()) map.dragging.disable();
+    };
+
+    el.addEventListener("touchstart", onStart, { passive: true });
+    el.addEventListener("touchmove", onMove, { passive: true });
+    el.addEventListener("touchend", onEnd, { passive: true });
+    el.addEventListener("touchcancel", onEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener("touchstart", onStart);
+      el.removeEventListener("touchmove", onMove);
+      el.removeEventListener("touchend", onEnd);
+      el.removeEventListener("touchcancel", onEnd);
+      el.style.touchAction = "";
+      map.dragging.enable();
+    };
+  }, [map, lock, onLockHint]);
+
   return null;
 }
+
 
 /* Snap-uri pentru bottom sheet, ca fracțiune din înălțimea hărții */
 const SNAPS = [0.28, 0.5, 0.88];
