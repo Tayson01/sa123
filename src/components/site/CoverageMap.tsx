@@ -116,9 +116,13 @@ function MapEvents({ picking, onPick }: { picking: boolean; onPick: (p: LatLngTu
 function MapApi({
   onReady,
   onZoom,
+  lock,
+  onLockHint,
 }: {
   onReady: (m: L.Map) => void;
   onZoom: (z: number) => void;
+  lock: boolean;
+  onLockHint: () => void;
 }) {
   const map = useMap();
   useEffect(() => {
@@ -151,8 +155,56 @@ function MapApi({
       map.off("mouseout", disable);
     };
   }, [map, onReady, onZoom]);
+
+  /* Pe touch: un deget = scroll în pagină, două degete = mișcă harta.
+     În fullscreen harta se mișcă normal cu un deget. */
+  useEffect(() => {
+    const coarse =
+      typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+    if (!coarse) return;
+
+    const el = map.getContainer();
+
+    if (!lock) {
+      map.dragging.enable();
+      el.style.touchAction = "none";
+      return () => {
+        el.style.touchAction = "";
+      };
+    }
+
+    map.dragging.disable();
+    el.style.touchAction = "pan-y";
+
+    const onStart = (e: TouchEvent) => {
+      if (e.touches.length >= 2) map.dragging.enable();
+      else map.dragging.disable();
+    };
+    const onMove = (e: TouchEvent) => {
+      if (e.touches.length < 2) onLockHint();
+    };
+    const onEnd = () => {
+      if (map.dragging.enabled()) map.dragging.disable();
+    };
+
+    el.addEventListener("touchstart", onStart, { passive: true });
+    el.addEventListener("touchmove", onMove, { passive: true });
+    el.addEventListener("touchend", onEnd, { passive: true });
+    el.addEventListener("touchcancel", onEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener("touchstart", onStart);
+      el.removeEventListener("touchmove", onMove);
+      el.removeEventListener("touchend", onEnd);
+      el.removeEventListener("touchcancel", onEnd);
+      el.style.touchAction = "";
+      map.dragging.enable();
+    };
+  }, [map, lock, onLockHint]);
+
   return null;
 }
+
 
 /* Snap-uri pentru bottom sheet, ca fracțiune din înălțimea hărții */
 const SNAPS = [0.28, 0.5, 0.88];
@@ -175,6 +227,17 @@ export default function CoverageMap() {
   const [locating, setLocating] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
   const [fullscreen, setFullscreen] = useState(false);
+  const [lockHint, setLockHint] = useState(false);
+  const hintTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showLockHint = useCallback(() => {
+    setLockHint(true);
+    if (hintTimer.current) clearTimeout(hintTimer.current);
+    hintTimer.current = setTimeout(() => setLockHint(false), 1600);
+  }, []);
+
+  useEffect(() => () => void (hintTimer.current && clearTimeout(hintTimer.current)), []);
+
 
   /* ---- bottom sheet drag ---- */
   const [snap, setSnap] = useState(0);
@@ -342,7 +405,7 @@ export default function CoverageMap() {
       className={
         fullscreen
           ? "fixed inset-0 z-[9999] bg-background"
-          : "relative h-[78svh] min-h-[520px] w-full sm:h-[620px]"
+          : "relative h-[66svh] min-h-[440px] w-full sm:h-[620px]"
       }
     >
       <div className="relative h-full w-full overflow-hidden sm:rounded-2xl">
@@ -357,7 +420,15 @@ export default function CoverageMap() {
           className="vm-map h-full w-full"
           style={{ background: "transparent" }}
         >
-          <MapApi onReady={(m) => (mapRef.current = m)} onZoom={setZoom} />
+          <MapApi
+            onReady={(m) => {
+              mapRef.current = m;
+            }}
+            onZoom={setZoom}
+            lock={!fullscreen}
+            onLockHint={showLockHint}
+          />
+
           <MapEvents
             picking={picking}
             onPick={(p) => {
@@ -436,7 +507,7 @@ export default function CoverageMap() {
               <Tooltip
                 direction="top"
                 offset={[0, -10]}
-                permanent={zoom >= 10 || active === z.slug}
+                permanent={active === z.slug || zoom >= 11}
                 className={`vm-tip ${active === z.slug ? "vm-tip-strong" : ""}`}
               >
                 {`${z.short ?? z.name} · ${z.etaMinutes}`}
@@ -466,6 +537,19 @@ export default function CoverageMap() {
         </MapContainer>
 
         <div className="pointer-events-none absolute inset-0 z-[500] vm-vignette" />
+
+        {/* Indiciu pe telefon: harta se mișcă doar cu două degete, ca pagina să poată fi derulată */}
+        <div
+          aria-hidden={!lockHint}
+          className={`pointer-events-none absolute inset-0 z-[700] flex items-center justify-center transition-opacity duration-200 ${
+            lockHint ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="rounded-2xl bg-black/70 px-4 py-2.5 text-center text-sm font-semibold text-white backdrop-blur-md">
+            Folosește două degete pentru a muta harta
+          </span>
+        </div>
+
 
         {/* ==== BARA DE SUS: căutare mereu vizibilă pe mobil ==== */}
         <div
@@ -528,7 +612,7 @@ export default function CoverageMap() {
             </button>
           ))}
           <div
-            className={`hidden overflow-hidden rounded-full border border-white/15 bg-black/60 backdrop-blur-xl sm:flex ${
+            className={`flex overflow-hidden rounded-full border border-white/15 bg-black/60 backdrop-blur-xl ${
               snap === 0 ? "mt-1 flex-col" : "flex-row-reverse"
             }`}
           >

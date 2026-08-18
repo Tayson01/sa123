@@ -627,3 +627,21 @@
     --vm-bar: 0px;
   }
 }
+
+/* Performanță pe telefon: fără animații continue în timpul mișcării hărții */
+@media (pointer: coarse) {
+  .vm-radar,
+  .vm-flow,
+  .vm-pin2-halo,
+  .vm-base-pulse {
+    animation: none !important;
+  }
+  .vm-vignette {
+    display: none;
+  }
+}
+.leaflet-drag-target .vm-radar,
+.leaflet-drag-target .vm-flow,
+.leaflet-drag-target .vm-pin2-halo {
+  animation: none !important;
+}
