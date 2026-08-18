@@ -155,7 +155,7 @@ function MapApi({
 }
 
 /* Snap-uri pentru bottom sheet, ca fracțiune din înălțimea hărții */
-const SNAPS = [0.3, 0.58, 0.9];
+const SNAPS = [0.28, 0.5, 0.88];
 
 export default function CoverageMap() {
   const dark = useIsDark();
