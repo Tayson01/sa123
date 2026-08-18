@@ -183,10 +183,12 @@ export default function CoverageMap() {
   const dragRef = useRef<{ y: number; h: number } | null>(null);
 
   const wrapH = () => wrapRef.current?.clientHeight ?? 560;
-  const snapH = useCallback((i: number) => Math.round(wrapH() * SNAPS[i]), []);
+  const snapH = useCallback((i: number) => Math.round(wrapH() * (SNAPS[i] ?? SNAPS[0]!)), []);
 
   useEffect(() => {
-    const apply = () => setSheetH(Math.round((wrapRef.current?.clientHeight ?? 560) * SNAPS[snap]));
+    const apply = () =>
+      setSheetH(Math.round((wrapRef.current?.clientHeight ?? 560) * (SNAPS[snap] ?? SNAPS[0]!)));
+
     apply();
     window.addEventListener("resize", apply);
     return () => window.removeEventListener("resize", apply);
