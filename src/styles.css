@@ -496,3 +496,134 @@
     display: block;
   }
 }
+
+/* ===== Hartă v2: markere, acțiuni, chips (mobile-first) ===== */
+.vm-pin2 {
+  position: relative;
+  display: block;
+  height: 26px;
+  width: 26px;
+}
+.vm-pin2-halo,
+.vm-pin2-dot {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  border-radius: 999px;
+}
+.vm-pin2-halo {
+  height: 26px;
+  width: 26px;
+  background: color-mix(in oklab, var(--vm-pin, #16a34a) 45%, transparent);
+  animation: vm-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+.vm-pin2-dot {
+  height: 14px;
+  width: 14px;
+  background: var(--vm-pin, #16a34a);
+  box-shadow:
+    0 0 0 3px #fff,
+    0 2px 10px rgb(0 0 0 / 0.4);
+}
+.vm-pin2-tag {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  border-radius: 999px;
+  background: var(--vm-pin, #16a34a);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
+}
+
+.vm-flow {
+  stroke-dasharray: 2 8;
+  animation: vm-dash 1.6s linear infinite;
+}
+@keyframes vm-dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+.vm-ring {
+  transition: opacity 0.3s ease;
+}
+
+.vm-act {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.25rem;
+  border-radius: 1rem;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: #fff;
+  transition: transform 0.14s ease;
+}
+.vm-act:active {
+  transform: scale(0.97);
+}
+.vm-act-brand {
+  background: var(--color-brand);
+  box-shadow: 0 10px 26px color-mix(in oklab, var(--color-brand) 42%, transparent);
+}
+.vm-act-wa {
+  background: #16a34a;
+  box-shadow: 0 10px 26px rgb(22 163 74 / 0.34);
+}
+.vm-act-ghost {
+  background: rgb(255 255 255 / 0.1);
+  border: 1px solid rgb(255 255 255 / 0.2);
+}
+
+.vm-chip {
+  flex-shrink: 0;
+  border-radius: 1rem;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  background: rgb(255 255 255 / 0.08);
+  color: #fff;
+  padding: 0.55rem 0.85rem;
+  text-align: left;
+  min-height: 3rem;
+}
+.vm-chip-on {
+  background: var(--color-brand);
+  border-color: transparent;
+}
+
+.vm-map .leaflet-container {
+  font-family: inherit;
+}
+@media (max-width: 640px) {
+  .vm-map .leaflet-control-attribution {
+    font-size: 7px;
+    max-width: 55vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .leaflet-tooltip.vm-tip {
+    font-size: 10px;
+    padding: 2px 7px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vm-flow,
+  .vm-pin2-halo {
+    animation: none;
+  }
+}
+
+.vm-fabs {
+  --vm-bar: calc(4.75rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 1024px) {
+  .vm-fabs {
+    --vm-bar: 0px;
+  }
+}
