@@ -507,7 +507,7 @@ export default function CoverageMap() {
               <Tooltip
                 direction="top"
                 offset={[0, -10]}
-                permanent={zoom >= 10 || active === z.slug}
+                permanent={active === z.slug || zoom >= 11}
                 className={`vm-tip ${active === z.slug ? "vm-tip-strong" : ""}`}
               >
                 {`${z.short ?? z.name} · ${z.etaMinutes}`}
