@@ -420,7 +420,15 @@ export default function CoverageMap() {
           className="vm-map h-full w-full"
           style={{ background: "transparent" }}
         >
-          <MapApi onReady={(m) => (mapRef.current = m)} onZoom={setZoom} />
+          <MapApi
+            onReady={(m) => {
+              mapRef.current = m;
+            }}
+            onZoom={setZoom}
+            lock={!fullscreen}
+            onLockHint={showLockHint}
+          />
+
           <MapEvents
             picking={picking}
             onPick={(p) => {
