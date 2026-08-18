@@ -155,7 +155,7 @@ function MapApi({
 }
 
 /* Snap-uri pentru bottom sheet, ca fracțiune din înălțimea hărții */
-const SNAPS = [0.19, 0.52, 0.88];
+const SNAPS = [0.3, 0.58, 0.9];
 
 export default function CoverageMap() {
   const dark = useIsDark();
@@ -584,7 +584,9 @@ export default function CoverageMap() {
 
         {/* ==== BOTTOM SHEET glisant ==== */}
         <div
-          className="absolute inset-x-0 bottom-0 z-[640] px-2 pb-2 sm:px-3 sm:pb-3"
+          className={`absolute inset-x-0 bottom-0 z-[640] px-2 sm:px-3 sm:pb-3 ${
+            fullscreen ? "pb-2" : "pb-[calc(4.75rem+env(safe-area-inset-bottom))] lg:pb-3"
+          }`}
           style={{
             paddingBottom: fullscreen
               ? "max(0.5rem, env(safe-area-inset-bottom))"
