@@ -612,7 +612,7 @@ export default function CoverageMap() {
             </button>
           ))}
           <div
-            className={`hidden overflow-hidden rounded-full border border-white/15 bg-black/60 backdrop-blur-xl sm:flex ${
+            className={`flex overflow-hidden rounded-full border border-white/15 bg-black/60 backdrop-blur-xl ${
               snap === 0 ? "mt-1 flex-col" : "flex-row-reverse"
             }`}
           >
