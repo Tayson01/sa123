@@ -227,6 +227,17 @@ export default function CoverageMap() {
   const [locating, setLocating] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
   const [fullscreen, setFullscreen] = useState(false);
+  const [lockHint, setLockHint] = useState(false);
+  const hintTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showLockHint = useCallback(() => {
+    setLockHint(true);
+    if (hintTimer.current) clearTimeout(hintTimer.current);
+    hintTimer.current = setTimeout(() => setLockHint(false), 1600);
+  }, []);
+
+  useEffect(() => () => void (hintTimer.current && clearTimeout(hintTimer.current)), []);
+
 
   /* ---- bottom sheet drag ---- */
   const [snap, setSnap] = useState(0);
