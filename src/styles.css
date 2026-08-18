@@ -618,3 +618,12 @@
     animation: none;
   }
 }
+
+.vm-fabs {
+  --vm-bar: calc(4.75rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 1024px) {
+  .vm-fabs {
+    --vm-bar: 0px;
+  }
+}
