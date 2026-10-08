@@ -38,11 +38,11 @@ type LatLngTuple = [number, number];
 const TILE_LAYERS = {
   street: {
     label: "Stradal",
-    light: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-    dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    light: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    dark: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     subdomains: ["a", "b", "c", "d"],
     attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   },
   satellite: {
     label: "Satelit",
