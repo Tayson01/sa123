@@ -42,7 +42,7 @@ const TILE_LAYERS = {
     dark: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     subdomains: ["a", "b", "c", "d"],
     attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   },
   satellite: {
     label: "Satelit",
