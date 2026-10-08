@@ -52,7 +52,7 @@ function ContactPage() {
           >
             <Mail className="size-5 text-brand" />
             <p className="mt-4 text-xs font-semibold text-muted-foreground">Email</p>
-            <p className="text-lg font-bold">{EMAIL}</p>
+            <p className="text-lg font-bold break-all">{EMAIL}</p>
           </a>
           <a
             href={MAPS}
