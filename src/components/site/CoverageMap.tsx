@@ -538,18 +538,19 @@ export default function CoverageMap() {
 
         <div className="pointer-events-none absolute inset-0 z-[500] vm-vignette" />
 
-        {/* Indiciu pe telefon: harta se mișcă doar cu două degete, ca pagina să poată fi derulată */}
-        <div
-          aria-hidden={!lockHint}
-          className={`pointer-events-none absolute inset-0 z-[700] flex items-center justify-center transition-opacity duration-200 ${
-            lockHint ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <span className="rounded-2xl bg-black/70 px-4 py-2.5 text-center text-sm font-semibold text-white backdrop-blur-md">
-            Folosește două degete pentru a muta harta
-          </span>
-        </div>
-
+        {/* Pe telefon, în pagină: harta e fixă (un deget derulează pagina). Butonul o deschide pe tot ecranul. */}
+        {compact && (
+          <button
+            onClick={() => {
+              setFullscreen(true);
+              setSnap(0);
+            }}
+            className="absolute right-2.5 z-[620] inline-flex h-11 items-center gap-2 rounded-full bg-brand px-4 text-[14px] font-bold text-white shadow-lg active:scale-95"
+            style={{ bottom: `${(sheetH ?? 150) + 16}px` }}
+          >
+            <Maximize2 className="size-4" /> Mută harta
+          </button>
+        )}
 
         {/* ==== BARA DE SUS: căutare mereu vizibilă pe mobil ==== */}
         <div
@@ -563,7 +564,7 @@ export default function CoverageMap() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Caută localitate sau drum…"
               aria-label="Caută localitate sau drum"
-              className="w-full min-w-0 bg-transparent text-[15px] font-medium outline-none placeholder:text-white/55"
+              className="w-full min-w-0 bg-transparent text-[16px] font-medium outline-none placeholder:text-white/55"
             />
             {query && (
               <button onClick={() => setQuery("")} aria-label="Șterge căutarea" className="p-1">
@@ -589,13 +590,13 @@ export default function CoverageMap() {
         <div
           className={`vm-fabs absolute right-2.5 z-[600] flex gap-2 transition-opacity duration-200 sm:right-3 ${
             snap === 0 ? "top-16 flex-col" : "flex-row-reverse"
-          } ${snap === 2 ? "pointer-events-none opacity-0" : "opacity-100"}`}
+          } ${snap === 2 || compact ? "pointer-events-none hidden" : "opacity-100"}`}
 
           style={
             snap === 0
               ? undefined
               : {
-                  bottom: `calc(${(sheetH ?? 0) + 12}px + ${fullscreen ? "0px" : "var(--vm-bar, 0px)"})`,
+                  bottom: `${(sheetH ?? 0) + 12}px`,
                 }
           }
         >
@@ -685,9 +686,7 @@ export default function CoverageMap() {
 
         {/* ==== BOTTOM SHEET glisant ==== */}
         <div
-          className={`absolute inset-x-0 bottom-0 z-[640] px-2 sm:px-3 sm:pb-3 ${
-            fullscreen ? "pb-2" : "pb-[calc(4.75rem+env(safe-area-inset-bottom))] lg:pb-3"
-          }`}
+          className="absolute inset-x-0 bottom-0 z-[640] px-2 pb-2 sm:px-3 sm:pb-3"
           style={{
             paddingBottom: fullscreen
               ? "max(0.5rem, env(safe-area-inset-bottom))"
@@ -701,23 +700,27 @@ export default function CoverageMap() {
             style={sheetStyle}
           >
             {/* mâner */}
-            <div
-              role="button"
-              tabIndex={0}
-              aria-label="Trage pentru a extinde panoul"
-              onPointerDown={onHandleDown}
-              onPointerMove={onHandleMove}
-              onPointerUp={onHandleUp}
-              onPointerCancel={onHandleUp}
-              onClick={() => {
-                const next = snap === 2 ? 0 : snap + 1;
-                setSnap(next);
-                setSheetH(snapH(next));
-              }}
-              className="flex shrink-0 cursor-grab touch-none items-center justify-center py-2.5 active:cursor-grabbing"
-            >
-              <span className="h-1.5 w-11 rounded-full bg-white/35" />
-            </div>
+            {compact ? (
+              <div className="h-2.5 shrink-0" />
+            ) : (
+              <div
+                role="button"
+                tabIndex={0}
+                aria-label="Trage pentru a extinde panoul"
+                onPointerDown={onHandleDown}
+                onPointerMove={onHandleMove}
+                onPointerUp={onHandleUp}
+                onPointerCancel={onHandleUp}
+                onClick={() => {
+                  const next = snap === 2 ? 0 : snap + 1;
+                  setSnap(next);
+                  setSheetH(snapH(next));
+                }}
+                className="flex shrink-0 cursor-grab touch-none items-center justify-center py-2.5 active:cursor-grabbing"
+              >
+                <span className="h-1.5 w-11 rounded-full bg-white/35" />
+              </div>
+            )}
 
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {measuredKm !== null ? (
@@ -794,6 +797,11 @@ export default function CoverageMap() {
                   </p>
                   <button
                     onClick={() => {
+                      if (compact) {
+                        setFullscreen(true);
+                        setSnap(1);
+                        return;
+                      }
                       const next = snap === 2 ? 1 : 2;
                       setSnap(next);
                       setSheetH(snapH(next));
