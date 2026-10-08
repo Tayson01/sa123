@@ -12,7 +12,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Sună la 0734 573 430 sau trimite locația pe WhatsApp. Vulcanizare mobilă în Constanța, disponibili 24/7, Șos. Mangaliei 126 B.",
+          "Sună la 0777 777 777 sau trimite locația pe WhatsApp. Vulcanizare mobilă în Constanța, disponibili 24/7, Șos. Mangaliei 126 B.",
       },
       { property: "og:title", content: "Contact — Vulcanizare mobilă Constanța" },
       {

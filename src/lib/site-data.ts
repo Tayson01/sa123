@@ -1,8 +1,8 @@
-export const PHONE = "0734 573 430";
-export const TEL = "+40734573430";
-export const WA_NUMBER = "40734573430";
+export const PHONE = "0777 777 777";
+export const TEL = "+40777777777";
+export const WA_NUMBER = "40777777777";
 export const WA =
-  "https://wa.me/40734573430?text=Bun%C4%83%20ziua!%20Am%20nevoie%20de%20vulcanizare%20mobil%C4%83%20%C3%AEn%20Constan%C8%9Ba.";
+  "https://wa.me/40777777777?text=Bun%C4%83%20ziua!%20Am%20nevoie%20de%20vulcanizare%20mobil%C4%83%20%C3%AEn%20Constan%C8%9Ba.";
 export const REVIEWS = "https://maps.app.goo.gl/TWmDYyph7UUA6BAx6";
 export const MAPS =
   "https://www.google.com/maps/search/?api=1&query=%C8%98oseaua%20Mangaliei%20126%20B%2C%20Constan%C8%9Ba";
