@@ -12,7 +12,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Sună la 0734 573 430 sau trimite locația pe WhatsApp. Vulcanizare mobilă în Constanța, disponibili 24/7, Șos. Mangaliei 126 B.",
+          "Sună la 0777 777 777 sau trimite locația pe WhatsApp. Vulcanizare mobilă în Constanța, disponibili 24/7, Șos. Mangaliei 126 B.",
       },
       { property: "og:title", content: "Contact — Vulcanizare mobilă Constanța" },
       {
@@ -52,7 +52,7 @@ function ContactPage() {
           >
             <Mail className="size-5 text-brand" />
             <p className="mt-4 text-xs font-semibold text-muted-foreground">Email</p>
-            <p className="text-lg font-bold">{EMAIL}</p>
+            <p className="text-lg font-bold break-all">{EMAIL}</p>
           </a>
           <a
             href={MAPS}
